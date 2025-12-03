@@ -1,0 +1,73 @@
+---
+# ArgoCD Application for Staging Environment
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prayag-app1-staging
+  namespace: argocd
+  labels:
+    environment: staging
+    app: prayag-app1
+spec:
+  project: default
+  
+  # Source: Git Repository with Helm Chart
+  source:
+    repoURL: https://github.com/prayag-gwl/ArgoCD-Multi-Cluster-Deployment.git
+    targetRevision: main
+    path: helm-charts/prayag-app1
+    helm:
+      valueFiles:
+      - env/values-staging.yaml
+  
+  # Destination: Staging Cluster
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: staging
+  
+  # Sync Policy: Automated for staging
+  syncPolicy:
+    automated:
+      prune: true        # Delete resources not in Git
+      selfHeal: true     # Auto-sync if cluster drifts from Git
+      allowEmpty: false  # Fail if no resources found
+    syncOptions:
+    - CreateNamespace=true  # Create namespace if it doesn't exist
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+
+---
+# ArgoCD Application for Production Environment
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prayag-app1-production
+  namespace: argocd
+  labels:
+    environment: production
+    app: prayag-app1
+spec:
+  project: default
+  
+  # Source: Git Repository with Helm Chart
+  source:
+    repoURL: https://github.com/prayag-gwl/ArgoCD-Multi-Cluster-Deployment.git
+    targetRevision: main
+    path: helm-charts/prayag-app1
+    helm:
+      valueFiles:
+      - env/values-prod.yaml
+  
+  # Destination: Production Cluster
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: production
+  
+  # Sync Policy: Manual for production (safer)
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+    # No automated section = manual sync required
+

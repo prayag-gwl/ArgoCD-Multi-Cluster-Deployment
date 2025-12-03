@@ -8,6 +8,7 @@ image:
 service:
   type: ClusterIP
   port: 8080
+  nodePort: 8090  # For NodePort type access
 
 resources:
   limits:
@@ -21,3 +22,18 @@ podLabels: {}
 podAnnotations: {}
 
 containerPort: 8080
+
+ingress:
+  enabled: false
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - host: localhost
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local

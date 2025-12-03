@@ -14,7 +14,21 @@ resources:
     memory: 128Mi
 
 service:
-  type: ClusterIP
+  type: NodePort
   port: 8080
+  nodePort: 8090
 
 env: "staging"
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  hosts:
+    - host: localhost
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
