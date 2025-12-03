@@ -20,14 +20,4 @@ service:
 env: "production"
 
 ingress:
-  enabled: true
-  className: "nginx"
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
-  hosts:
-    - host: localhost
-      paths:
-        - path: /
-          pathType: Prefix
-  tls: []
+  enabled: false  # Disabled - using port-forward for access. Enable if Ingress Controller is installed.
