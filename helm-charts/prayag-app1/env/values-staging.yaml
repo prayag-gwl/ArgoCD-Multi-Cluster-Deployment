@@ -1,4 +1,4 @@
-replicaCount: 4
+replicaCount: 2
 
 image:
   repository: prayag8tiwari/prayag-new1-pipeline
@@ -14,9 +14,8 @@ resources:
     memory: 128Mi
 
 service:
-  type: NodePort
+  type: ClusterIP
   port: 8080
-  nodePort: 8090
 
 env: "staging"
 
