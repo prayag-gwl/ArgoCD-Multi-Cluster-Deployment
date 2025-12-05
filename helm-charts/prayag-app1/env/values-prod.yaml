@@ -1,4 +1,4 @@
-replicaCount: 2
+replicaCount: 4
 
 image:
   repository: prayag8tiwari/prayag-new1-pipeline
